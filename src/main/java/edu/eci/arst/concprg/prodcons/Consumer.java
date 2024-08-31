@@ -5,6 +5,7 @@
  */
 package edu.eci.arst.concprg.prodcons;
 
+import java.util.Objects;
 import java.util.Queue;
 
 /**
@@ -23,12 +24,18 @@ public class Consumer extends Thread{
     @Override
     public void run() {
         while (true) {
-
             if (queue.size() > 0) {
                 int elem=queue.poll();
-                System.out.println("Consumer consumes "+elem);                                
+                System.out.println("Consumer consumes "+elem);
             }
-            
+            //Primer cambio: dormir el hilo para evitar consumos inncesearios, se hace con el else
+            else{
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 }

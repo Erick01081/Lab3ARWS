@@ -20,7 +20,7 @@ public class StartProduction {
     
     public static void main(String[] args) {
         
-        Queue<Integer> queue=new LinkedBlockingQueue<>();
+        Queue<Integer> queue=new LinkedBlockingQueue<>((int) Long.MAX_VALUE);
         
         
         new Producer(queue,Long.MAX_VALUE).start();
