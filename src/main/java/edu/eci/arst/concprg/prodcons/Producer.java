@@ -20,9 +20,9 @@ public class Producer extends Thread {
 
     private int dataSeed = 0;
     private Random rand=null;
-    private final long stockLimit;
+    private final int stockLimit;
 
-    public Producer(Queue<Integer> queue,long stockLimit) {
+    public Producer(Queue<Integer> queue,int stockLimit) {
         this.queue = queue;
         rand = new Random(System.currentTimeMillis());
         this.stockLimit=stockLimit;
@@ -31,13 +31,20 @@ public class Producer extends Thread {
     @Override
     public void run() {
         while (true) {
-
             dataSeed = dataSeed + rand.nextInt(100);
             System.out.println("Producer added " + dataSeed);
             queue.add(dataSeed);
-            
+            //Se hace lento el productor, se detiene el hilo si la cola esta lenta
+            //Revisar si puede usarse wait y notify, crear un nueco constructor que reciba consumer como hilo de anclaje y que este se encargue de avisar
+            while(queue.size() == stockLimit){
+                try {
+                    sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
             }

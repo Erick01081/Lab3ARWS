@@ -25,17 +25,16 @@ public class Consumer extends Thread{
     public void run() {
         while (true) {
             if (queue.size() > 0) {
-                int elem=queue.poll();
-                System.out.println("Consumer consumes "+elem);
+                int elem = queue.poll();
+                System.out.println("Consumer consumes " + elem);
             }
             //Primer cambio: dormir el hilo para evitar consumos inncesearios, se hace con el else
-            else{
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+            //Se retira el else para hacer el consumidor mas lento
         }
     }
 }
