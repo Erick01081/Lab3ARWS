@@ -31,7 +31,7 @@ public class Producer extends Thread {
     @Override
     public void run() {
         while (true) {
-            dataSeed = dataSeed + rand.nextInt(100);
+            dataSeed += rand.nextInt(100);
             System.out.println("Producer added " + dataSeed);
             queue.add(dataSeed);
             //Se hace lento el productor, se detiene el hilo si la cola esta lenta

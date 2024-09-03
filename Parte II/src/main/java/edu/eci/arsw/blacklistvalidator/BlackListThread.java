@@ -8,6 +8,8 @@ public class BlackListThread extends Thread {
     private String ipAddress;
     private static int ocurrencesCount;
     private ArrayList<Integer> indexReport = new ArrayList<Integer>();
+    private Object lockReports = new Object();
+    private Object lockEnd = new Object();
 
     public BlackListThread(int intervaloInicial, int intervaloFinal, String ip) {
         this.intervaloInicial = intervaloInicial;
@@ -17,22 +19,30 @@ public class BlackListThread extends Thread {
     }
 
     public boolean endByBlackListCount(){
-        if (ocurrencesCount >= HostBlackListsValidator.BLACK_LIST_ALARM_COUNT){
-            return true;
+        synchronized(lockEnd){
+            if (ocurrencesCount >= HostBlackListsValidator.BLACK_LIST_ALARM_COUNT){
+                return true;
+            }
+            return false;
         }
-        return false;
     }
     
+    
+
     public void findReports(String ipAddress, int intervaloInicial, int intervaloFinal){
         HostBlacklistsDataSourceFacade skds=HostBlacklistsDataSourceFacade.getInstance();
         int amountHosts = skds.getRegisteredServersCount();
         if(intervaloFinal > amountHosts){intervaloFinal = amountHosts;}
-        for (int i = intervaloInicial; i < intervaloFinal && !endByBlackListCount(); i++){
-            if(skds.isInBlackListServer(i, ipAddress)){
-                ocurrencesCount++;
-                indexReport.add(i);
+        synchronized(lockReports){
+            for (int i = intervaloInicial; i < intervaloFinal && !endByBlackListCount(); i++){
+                if(skds.isInBlackListServer(i, ipAddress)){
+                    ocurrencesCount++;
+                    indexReport.add(i);
+                }
             }
         }
+        
+        
     }
 
     @Override
