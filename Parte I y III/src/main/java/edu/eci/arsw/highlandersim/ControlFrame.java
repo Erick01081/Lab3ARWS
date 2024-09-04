@@ -35,7 +35,7 @@ public class ControlFrame extends JFrame {
     private JLabel statisticsLabel;
     private JScrollPane scrollPane;
     private JTextField numOfImmortals;
-    private Object lock = new Object();
+    private final Object lock = new Object();
 
     /**
      * Launch the application.
@@ -107,12 +107,14 @@ public class ControlFrame extends JFrame {
         JButton btnResume = new JButton("Resume");
 
         btnResume.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                for(Immortal i: immortals){
+            public void actionPerformed (ActionEvent e){
+            synchronized (lock) {
+                for (Immortal i : immortals) {
                     i.resumeThread();
                 }
                 lock.notifyAll();
             }
+        }
         });
 
         toolBar.add(btnResume);
