@@ -18,8 +18,6 @@ public class Immortal extends Thread {
     private final Random r = new Random(System.currentTimeMillis());
     boolean pause = false;
     private final Object pauseLock = new Object();
-    private Object first = new Object();
-    private Object second = new Object();
 
     public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb) {
         super(name);
@@ -59,6 +57,8 @@ public class Immortal extends Thread {
     }
 
     public void fight(Immortal i2) {
+        Immortal first;
+        Immortal second;
         if(this.hashCode() > i2.hashCode()){
             first = this;
             second = i2;
