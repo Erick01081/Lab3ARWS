@@ -91,6 +91,11 @@ public class ControlFrame extends JFrame {
                 for(Immortal i: immortals){
                     i.pause();
                 }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
                 int sum = 0;
                 for (Immortal im : immortals) {
                     sum += im.getHealth();

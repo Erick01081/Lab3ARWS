@@ -59,7 +59,7 @@ public class Immortal extends Thread {
     public void fight(Immortal i2) {
         Immortal first;
         Immortal second;
-        if(this.hashCode() > i2.hashCode()){
+        if(System.identityHashCode(this) > System.identityHashCode(i2)){
             first = this;
             second = i2;
         }
