@@ -18,8 +18,8 @@ public class Immortal extends Thread {
     private final Random r = new Random(System.currentTimeMillis());
     boolean pause = false;
     private final Object pauseLock = new Object();
-    private static final Object first = new Object();
-    private static final Object second = new Object();
+    private Object first = new Object();
+    private Object second = new Object();
 
     public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb) {
         super(name);
@@ -59,18 +59,25 @@ public class Immortal extends Thread {
     }
 
     public void fight(Immortal i2) {
-        synchronized(first){
-            synchronized(second){
+        if(this.hashCode() > i2.hashCode()){
+            first = this;
+            second = i2;
+        }
+        else{
+            first = i2;
+            second = this;
+        }
+        synchronized(first) {
+            synchronized (second) {
                 if (i2.getHealth() > 0) {
                     i2.changeHealth(i2.getHealth() - defaultDamageValue);
                     this.changeHealth(getHealth() + defaultDamageValue);
-                    updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
+                    updateCallback.processReport("Fight: " + this + " vs " + i2 + "\n");
                 } else {
                     updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
                 }
             }
         }
-        
     }
 
     public void changeHealth(int v) {
