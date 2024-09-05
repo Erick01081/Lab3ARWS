@@ -2,6 +2,8 @@ package edu.eci.arsw.highlandersim;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,12 +72,12 @@ public class ControlFrame extends JFrame {
         final JButton btnStart = new JButton("Start");
         btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 immortals = setupInmortals();
-
                 if (immortals != null) {
-                    for (Immortal im : immortals) {
-                        im.start();
+                    synchronized (immortals) {
+                        for (Immortal im : immortals) {
+                            im.start();
+                        }
                     }
                 }
 
@@ -151,9 +153,7 @@ public class ControlFrame extends JFrame {
         
         try {
             int ni = Integer.parseInt(numOfImmortals.getText());
-
-            List<Immortal> il = new LinkedList<Immortal>();
-
+            List<Immortal> il = Collections.synchronizedList(new ArrayList<Immortal>());
             for (int i = 0; i < ni; i++) {
                 Immortal i1 = new Immortal("im" + i, il, DEFAULT_IMMORTAL_HEALTH, DEFAULT_DAMAGE_VALUE,ucb);
                 il.add(i1);
