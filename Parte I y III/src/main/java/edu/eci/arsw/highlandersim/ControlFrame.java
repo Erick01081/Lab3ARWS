@@ -92,7 +92,7 @@ public class ControlFrame extends JFrame {
                     i.pause();
                 }
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(immortals.size() / 10);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
