@@ -69,15 +69,7 @@ public class ControlFrame extends JFrame {
         final JButton btnStart = new JButton("Start");
         btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                immortals = setupInmortals();
-                if (immortals != null) {
-                    synchronized (immortals) {
-                        for (Immortal im : immortals) {
-                            im.start();
-                        }
-                    }
-                }
-
+                startExecution();
                 btnStart.setEnabled(false);
 
             }
@@ -133,6 +125,17 @@ public class ControlFrame extends JFrame {
         statisticsLabel = new JLabel("Immortals total health:");
         contentPane.add(statisticsLabel, BorderLayout.SOUTH);
 
+    }
+
+    private void startExecution(){
+        immortals = setupInmortals();
+        if (immortals != null) {
+            synchronized (immortals) {
+                for (Immortal im : immortals) {
+                    im.start();
+                }
+            }
+        }
     }
 
     private void pauseExecution(){
