@@ -87,38 +87,18 @@ public class ControlFrame extends JFrame {
         JButton btnPauseAndCheck = new JButton("Pause and check");
         btnPauseAndCheck.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                synchronized (immortals) {
-                    for(Immortal i: immortals){
-                        i.pause();
-                    }
-                    try {
-                        Thread.sleep(immortals.size() / 10);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                    int sum = 0;
-                    for (Immortal im : immortals) {
-                        sum += im.getHealth();
-                    }
-                    statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
-                }
+                pauseAndCheck();
             }
         });
         toolBar.add(btnPauseAndCheck);
 
         JButton btnResume = new JButton("Resume");
 
+        
         btnResume.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e){
-            synchronized (lock) {
-                synchronized (immortals) {
-                    for (Immortal i : immortals) {
-                        i.resumeThread();
-                    }
-                    lock.notifyAll();
-                } 
+                pauseExecution();
             }
-        }
         });
 
         toolBar.add(btnResume);
@@ -135,6 +115,13 @@ public class ControlFrame extends JFrame {
         btnStop.setForeground(Color.RED);
         toolBar.add(btnStop);
 
+        btnStop.addActionListener(new ActionListener() {
+            public void actionPerformed (ActionEvent e){
+                stopExecution();
+                btnStart.setEnabled(true);
+        }
+        });
+
         scrollPane = new JScrollPane();
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
@@ -146,6 +133,40 @@ public class ControlFrame extends JFrame {
         statisticsLabel = new JLabel("Immortals total health:");
         contentPane.add(statisticsLabel, BorderLayout.SOUTH);
 
+    }
+
+    private void pauseExecution(){
+        synchronized (lock) {
+            synchronized (immortals) {
+                for (Immortal i : immortals) {
+                    i.resumeThread();
+                }
+                lock.notifyAll();
+            } 
+        }
+    }
+
+    private void pauseAndCheck(){
+        synchronized (immortals) {
+            for(Immortal i: immortals){
+                i.pause();
+            }
+            try {
+                Thread.sleep(immortals.size() / 10);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            int sum = 0;
+            for (Immortal im : immortals) {
+                sum += im.getHealth();
+            }
+            statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
+        }
+    }
+
+    private void stopExecution(){
+        pauseAndCheck();
+        immortals.clear();
     }
 
     public List<Immortal> setupInmortals() {
