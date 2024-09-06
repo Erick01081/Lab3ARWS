@@ -40,17 +40,19 @@ public class Immortal extends Thread {
             if (nextFighterIndex == myIndex) {
                 nextFighterIndex = ((nextFighterIndex + 1) % immortalsPopulation.size());
             }
-            im = immortalsPopulation.get(nextFighterIndex);
-            if(im.getHealth() != 0){
-                this.fight(im);
-            }
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(health == 0){
-                immortalsPopulation.remove(this);
+            if(nextFighterIndex <= immortalsPopulation.size()){
+                im = immortalsPopulation.get(nextFighterIndex);
+                if(im.getHealth() != 0){
+                    this.fight(im);
+                }
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(health == 0){
+                    immortalsPopulation.remove(this);
+                }
             }
         }
 

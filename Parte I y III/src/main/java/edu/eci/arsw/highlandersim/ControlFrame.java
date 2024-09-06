@@ -87,20 +87,21 @@ public class ControlFrame extends JFrame {
         JButton btnPauseAndCheck = new JButton("Pause and check");
         btnPauseAndCheck.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ArrayList<Immortal> copy = new ArrayList<>(immortals);
-                for(Immortal i: copy){
-                    i.pause();
+                synchronized (immortals) {
+                    for(Immortal i: immortals){
+                        i.pause();
+                    }
+                    try {
+                        Thread.sleep(immortals.size() / 10);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    int sum = 0;
+                    for (Immortal im : immortals) {
+                        sum += im.getHealth();
+                    }
+                    statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
                 }
-                try {
-                    Thread.sleep(immortals.size() / 10);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-                int sum = 0;
-                for (Immortal im : copy) {
-                    sum += im.getHealth();
-                }
-                statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
             }
         });
         toolBar.add(btnPauseAndCheck);
