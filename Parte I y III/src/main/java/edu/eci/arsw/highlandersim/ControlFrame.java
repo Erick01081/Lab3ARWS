@@ -1,28 +1,25 @@
 package edu.eci.arsw.highlandersim;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import javax.swing.JLabel;
 import javax.swing.JTextField;
-import java.awt.Color;
-import javax.swing.JScrollBar;
+import javax.swing.JToolBar;
+import javax.swing.border.EmptyBorder;
 
 public class ControlFrame extends JFrame {
 
@@ -113,10 +110,12 @@ public class ControlFrame extends JFrame {
         btnResume.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e){
             synchronized (lock) {
-                for (Immortal i : immortals) {
-                    i.resumeThread();
-                }
-                lock.notifyAll();
+                synchronized (immortals) {
+                    for (Immortal i : immortals) {
+                        i.resumeThread();
+                    }
+                    lock.notifyAll();
+                } 
             }
         }
         });
