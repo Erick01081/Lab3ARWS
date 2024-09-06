@@ -40,7 +40,7 @@ public class Immortal extends Thread {
             if (nextFighterIndex == myIndex) {
                 nextFighterIndex = ((nextFighterIndex + 1) % immortalsPopulation.size());
             }
-            if(nextFighterIndex <= immortalsPopulation.size()){
+            if(nextFighterIndex < immortalsPopulation.size()){
                 im = immortalsPopulation.get(nextFighterIndex);
                 if(im.getHealth() != 0){
                     this.fight(im);
