@@ -90,7 +90,8 @@ public class ControlFrame extends JFrame {
         JButton btnPauseAndCheck = new JButton("Pause and check");
         btnPauseAndCheck.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                for(Immortal i: immortals){
+                ArrayList<Immortal> copy = new ArrayList<>(immortals);
+                for(Immortal i: copy){
                     i.pause();
                 }
                 try {
@@ -99,7 +100,7 @@ public class ControlFrame extends JFrame {
                     e1.printStackTrace();
                 }
                 int sum = 0;
-                for (Immortal im : immortals) {
+                for (Immortal im : copy) {
                     sum += im.getHealth();
                 }
                 statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
