@@ -1,0 +1,6 @@
+Sí, la eliminación de inmortales muertos podría crear una condición de carrera. Esto ocurre porque múltiples hilos (inmortales) podrían estar accediendo y modificando la lista de inmortales simultáneamente. Si un hilo intenta acceder a la lista para eliminar un inmortal mientras otro hilo está en medio de una pelea, podrían producirse inconsistencias o errores. Además, cuando hay muchos inmortales en la simulación, el problema puede empeorar debido a la alta frecuencia de peleas y eliminaciones. Esto puede llevar a:
+
+-Excepciones Concurrentes: Intentos simultáneos de eliminar inmortales pueden provocar excepciones, como ConcurrentModificationException.
+-Desempeño Afectado: Las operaciones de eliminación y modificación de listas en un entorno multihilo sin una adecuada sincronización pueden llevar a un rendimiento deficiente.
+
+Lo que se decide es que en el método run(), se agregó una condición para verificar si el health (salud) del inmortal ha llegado a 0. Si es así, el inmortal se elimina de la lista de inmortales.
